@@ -1,0 +1,25 @@
+{% extends 'auctions/layout.html' %} 
+
+
+{% block body %}
+	<div style="box-shadow: 0 0 24px rgb(0, 0, 0, .15); padding: 12px; max-width: 800px; margin:auto">
+		<h3>New Auction</h3>
+		<div style="color: red;">{{error}}</div>
+		<form action="{% url 'create_auction' %}" method="post" style="display: flex; flex-direction: column; gap: 24px; padding: 12px;">
+			{% csrf_token %}
+			<input type="text" name="title" placeholder="Title">
+			<textarea name="description" placeholder="Description" rows="5"></textarea>
+			
+			<select name="category_id" id="category-select">
+				{% for category in categories %}
+					<option value="{{category.id}}">{{category.title}}</option>
+				{% endfor %}
+			</select>
+
+			<input type="number" placeholder="Start Price" min="1" step="any" name="start_price">
+			<input type="text" placeholder="Image url" name="image_url">
+			<input type="submit">
+		</form>
+	</div>
+
+{% endblock %}

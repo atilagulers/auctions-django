@@ -1,0 +1,44 @@
+{% extends 'auctions/layout.html' %} 
+
+
+{% block body %}
+
+<div style="display: flex; box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);">
+	<img src="{{auction.image_url}}" alt="photo {{auction.title}}" style="width: 400px;">
+
+	<div style="margin: 16px 48px;">
+		<h2 style="margin-bottom: 32px;">Listing: {{auction.title}}</h2>
+		<div style="display: flex; flex-direction: column; gap: 16px;">
+			<div>{{auction.description}}</div>
+			<div style="font-weight: bold; font-size:x-large;">
+				$
+				{% if auction.highest_bid %}
+						{{ auction.highest_bid }}
+				{% else %}
+						{{ auction.start_price }}
+				{% endif %}
+			</div>
+			<div>2 bid(s) so far. Your bid is the current bid.</div>
+
+			<form action="" method="post">
+				<input type="number" step="any" min={{auction.start_price}}>
+				<input type="submit" value="Place Bid">
+			</form>
+
+			<div style="margin-top: 24px;">
+				<h3>Details</h3>
+				<ul>
+					<li>
+						<label for="">Listed by:</label>
+						<a href="">{{auction.user}}</a>
+					</li>
+					<li>
+						<label for="">Category:</label>
+						<span>{{auction.category}}</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
