@@ -66,7 +66,7 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
-def create(request):
+def create_auction(request):
     categories = Category.objects.all()
 
     if request.method == 'POST':
@@ -82,12 +82,21 @@ def create(request):
         category = Category.objects.get(pk=category_id)
         start_price = request.POST["start_price"]
         image_url = request.POST["image_url"]
-        new_auction = Auction(title=title, description=description,category=category,start_price=start_price, image_url=image_url, user=user)
+        new_auction = Auction(title=title, description=description,category=category,start_price=start_price,
+        image_url=image_url, user=user)
+        
         new_auction.save()
 
         return HttpResponseRedirect(reverse("index"))
         
 
-    return render(request, "auctions/create.html", {
+    return render(request, "auctions/create_auction.html", {
         "categories": categories
+    })
+
+
+def view_auction(request, auction_id):
+    auction = Auction.objects.get(pk=auction_id)
+    return render(request, "auctions/view_auction.html",{
+        "auction": auction
     })

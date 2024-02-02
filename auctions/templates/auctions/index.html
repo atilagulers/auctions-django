@@ -12,7 +12,9 @@
                     <img src="{{auction.image_url}}" alt="{{auction.title}} photo">
                 </div>
                 <section>
-                    <h4 class="auction-title">{{auction.title}}</h4>
+                    <h4 class="auction-title">
+                        <a href="{% url 'view_auction' auction.id %}">{{auction.title}}</a>
+                    </h4>
 
                     <div>
                         {{auction.description}}
