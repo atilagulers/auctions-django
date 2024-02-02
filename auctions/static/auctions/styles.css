@@ -4,7 +4,7 @@ body {
 
 .auction-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, max-content));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 }
 
 .auction {
@@ -16,8 +16,8 @@ body {
 
 .auction img {
   width: 100%;
-  height: 100%;
-  object-fit: contain;
+  max-height: 300px;
+  object-fit: cover;
   background-color: black;
 }
 
@@ -29,7 +29,7 @@ body {
 }
 
 .auction-title {
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 .auction-price {
