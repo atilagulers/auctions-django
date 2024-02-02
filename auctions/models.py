@@ -42,3 +42,7 @@ class Bid(models.Model):
     def __str__(self):
         return f"{self.user.full_name} - {self.auction.title} - ${self.amount}"
  
+
+class Comment(models.Model):
+    message = models.CharField(max_length=256)
+    user = models.ForeignKey("User", on_delete=models.CASCADE, related_name='user_comments')
