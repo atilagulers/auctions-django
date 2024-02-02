@@ -23,7 +23,7 @@ class Auction(models.Model):
     highest_bid = models.ForeignKey("Bid", on_delete=models.DO_NOTHING, related_name="bid_price", blank=True, null=True)
     user = models.ForeignKey("User", on_delete=models.DO_NOTHING, related_name='user_actions')
     category = models.ForeignKey("Category", on_delete=models.DO_NOTHING, related_name='category_auctions')
-    isActive = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
