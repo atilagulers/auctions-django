@@ -1,7 +1,47 @@
 {% extends "auctions/layout.html" %}
+{% load static %}
+
 
 {% block body %}
-    <h2>Active Listings</h2>
+    <h2>Active divstings</h2>
 
-    TODO
+     <div class="auction-list">
+        {% for auction in auctions %}
+            <div class="auction">
+                <div>
+                    <img src="{{auction.image_url}}" alt="{{auction.title}} photo">
+                </div>
+                <section>
+                    <h4 class="auction-title">{{auction.title}}</h4>
+
+                    <div>
+                        <label>Description: </label>
+                        {{auction.description}}
+                    </div>
+                    
+                    <div class="auction-price">   
+                        <label>Price:</label>
+    
+                        $
+                        {% if auction.highest_bid %}
+                            {{ auction.highest_bid }}
+                        {% else %}
+                            {{ auction.start_price }}
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <label>Listed by: </label>
+                        <a href="">{{auction.user}}</a>
+                    </div>
+                    <div>
+                        <label> Created: </label>
+                        {{auction.created_at}}
+                    </div>
+                    <!--<div>{{auction.category.title}}</div>-->
+                    
+                </section>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

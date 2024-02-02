@@ -3,14 +3,16 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-
-
+ 
 from .models import User, Auction, Category, Bid
 
 
 def index(request):
-    auctions = Auction.objects.all()
-    return render(request, "auctions/index.html")
+    auctions = Auction.objects.all().filter(is_active=True)
+    print(auctions)
+    return render(request, "auctions/index.html",{
+        "auctions": auctions
+    })
 
 
 def login_view(request):
