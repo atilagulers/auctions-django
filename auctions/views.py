@@ -4,7 +4,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
+
+from .models import User, Auction, Category, Bid
 
 
 def index(request):
@@ -63,4 +64,27 @@ def register(request):
         return render(request, "auctions/register.html")
 
 def create(request):
-    return render(request, "auctions/create.html")
+    categories = Category.objects.all()
+
+    if request.method == 'POST':
+        user = request.user
+        if not user.is_authenticated:
+            return render(request, "auctions/create.html", {
+                "error": "Please login to create Auction"
+            })
+        
+        title = request.POST["title"]
+        description = request.POST["description"]
+        category_id = request.POST["category_id"]
+        category = Category.objects.get(pk=category_id)
+        start_price = request.POST["start_price"]
+        image_url = request.POST["image_url"]
+        new_auction = Auction(title=title, description=description,category=category,start_price=start_price, image_url=image_url, user=user)
+        new_auction.save()
+
+        return HttpResponseRedirect(reverse("index"))
+        
+
+    return render(request, "auctions/create.html", {
+        "categories": categories
+    })

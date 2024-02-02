@@ -18,8 +18,9 @@ class Category(models.Model):
 class Auction(models.Model):
     title = models.CharField(max_length=64)
     description = models.CharField(max_length=256)
-    imageUrl = models.CharField(max_length=1000)
-    highest_bid = models.ForeignKey("Bid", on_delete=models.DO_NOTHING, related_name="bid_price")
+    image_url = models.CharField(max_length=1000)
+    start_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    highest_bid = models.ForeignKey("Bid", on_delete=models.DO_NOTHING, related_name="bid_price", blank=True, null=True)
     user = models.ForeignKey("User", on_delete=models.DO_NOTHING, related_name='user_actions')
     category = models.ForeignKey("Category", on_delete=models.DO_NOTHING, related_name='category_auctions')
     isActive = models.BooleanField(default=True)
@@ -28,7 +29,8 @@ class Auction(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
-        return f"{self.title} - ${self.highest_bid.amount} - ({self.category})"
+        highest_bid_amount = self.highest_bid.amount if self.highest_bid else self.start_price
+        return f"{self.title} - ${highest_bid_amount} - ({self.category})"
 
 
 
