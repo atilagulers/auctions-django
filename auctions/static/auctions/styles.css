@@ -2,6 +2,8 @@ body {
   padding: 10px;
 }
 
+/* Auction */
+
 .auction-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -35,3 +37,21 @@ body {
 .auction-price {
   font-weight: bold;
 }
+
+/*  */
+
+/* Comment */
+
+.comment-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.comment {
+  padding: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Button */

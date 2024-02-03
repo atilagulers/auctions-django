@@ -1,10 +1,11 @@
-{% extends 'auctions/layout.html' %} 
+{% extends "auctions/layout.html" %} 
+{% load static %}
 
 
 {% block body %}
 
 <div style="display: flex; box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);">
-	<img src="{{auction.image_url}}" alt="photo {{auction.title}}" style="width: 400px;">
+	<img src="{{auction.image_url}}" alt="photo {{auction.title}}" style="width: 400px; height: 600px; object-fit: cover;">
 
 	<div style="margin: 16px 48px;">
 		<h2 style="margin-bottom: 32px;">Listing: {{auction.title}}</h2>
@@ -37,6 +38,28 @@
 						<span>{{auction.category}}</span>
 					</li>
 				</ul>
+			</div>
+
+			<div>
+				<h5>Comments</h5>
+				<div>
+					<form action="" style="margin-bottom: 24px;">
+						<textarea name="new_comment" rows="5" style="width: 100%;padding: 12px;" placeholder="Write a comment"></textarea>
+						<input type="submit" value="Comment">
+					</form>
+				</div>
+				<div class="comment-container">
+					<section class="comment">
+						<strong>User</strong>
+						<p>this is amazing product</p>
+					</section>
+					<section class="comment">
+						<strong>User</strong>
+						<p>
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid tenetur expedita iste nobis porro quo neque repellat impedit beatae obcaecati et aliquam, sequi, praesentium quia officiis magnam ipsum, ut rem.
+						</p>
+					</section>
+				</div>
 			</div>
 		</div>
 	</div>

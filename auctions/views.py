@@ -67,10 +67,13 @@ def register(request):
         return render(request, "auctions/register.html")
 
 def create_auction(request):
+    user = request.user
     categories = Category.objects.all()
 
+    if not user.is_authenticated:
+        return HttpResponseRedirect(reverse("index"))
+
     if request.method == 'POST':
-        user = request.user
         if not user.is_authenticated:
             return render(request, "auctions/create.html", {
                 "error": "Please login to create Auction"
@@ -85,6 +88,7 @@ def create_auction(request):
         new_auction = Auction(title=title, description=description,category=category,start_price=start_price,
         image_url=image_url, user=user)
         
+        
         new_auction.save()
 
         return HttpResponseRedirect(reverse("index"))
@@ -97,6 +101,11 @@ def create_auction(request):
 
 def view_auction(request, auction_id):
     auction = Auction.objects.get(pk=auction_id)
+
+
+
+  
+    
     return render(request, "auctions/view_auction.html",{
         "auction": auction
     })
