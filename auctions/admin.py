@@ -9,3 +9,5 @@ admin.site.register(Auction)
 admin.site.register(Category)
 admin.site.register(Bid)
 admin.site.register(Comment)
+
+
