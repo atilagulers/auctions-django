@@ -9,7 +9,15 @@ from .models import User, Auction, Category, Bid, Comment
 
 
 def index(request):
-    auctions = Auction.objects.all().filter(is_active=True)
+    category_query = request.GET.get('category')
+    category = Category.objects.get(title__iexact=category_query) if category_query else None
+
+    
+    if not category:
+        auctions = Auction.objects.all().filter(is_active=True)
+    else:
+        auctions = Auction.objects.all().filter(is_active=True, category=category)
+    
     return render(request, "auctions/index.html",{
         "auctions": auctions
     })
@@ -154,7 +162,6 @@ def place_comment(request, auction_id):
 
 def watchlist(request, auction_id):
     if request.method == "POST":
-        
         user = request.user        
        
         if not user.is_authenticated:
@@ -173,6 +180,14 @@ def watchlist(request, auction_id):
         
         return HttpResponseRedirect(reverse("view_auction", args=(auction_id,)))
 
+
+def list_watchlist(request):
+    user = request.user
+    auctions = user.watchlist.all()
+    return render(request, "auctions/watchlist.html",{
+        "auctions": auctions
+    })
+
 def close_auction(request, auction_id):
     if request.method == "POST":
         if not request.user.id == Auction.objects.get(pk=auction_id).user.id:
@@ -185,3 +200,10 @@ def close_auction(request, auction_id):
         
         messages.success(request, "Auction closed successfully.")
         return HttpResponseRedirect(reverse("view_auction", args=(auction_id,)))
+
+
+def list_categories(request):
+    categories = Category.objects.all()
+    return render(request, "auctions/categories.html",{
+        "categories": categories
+    })
