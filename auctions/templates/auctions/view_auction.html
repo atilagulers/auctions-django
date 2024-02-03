@@ -12,17 +12,28 @@
 		<div style="display: flex; flex-direction: column; gap: 16px;">
 			<div>{{auction.description}}</div>
 			<div style="font-weight: bold; font-size:x-large;">
-				$
-				{% if auction.highest_bid %}
-						{{ auction.highest_bid }}
+				$ {% if auction.highest_bid %}
+					{{auction.highest_bid}}
 				{% else %}
-						{{ auction.start_price }}
+					{{auction.start_price}}
 				{% endif %}
 			</div>
-			<div>2 bid(s) so far. Your bid is the current bid.</div>
+			<div>
+				{{bids}} bid(s) so far.
+				<span>
+					{% if auction.highest_bid.user == user %}
+						<p>Your bid is the current bid.</p>
+					{% elif auction.highest_bid.user %}
+						<p>Current bid by {{auction.highest_bid.user}}</p>
+					{% else %}
+						<p>No bids yet.</p>
+					{% endif %}
+				</span>
+			</div>
 
-			<form action="" method="post">
-				<input type="number" step="any" min={{auction.start_price}}>
+			<form action="{% url 'place_bid' auction.id %}" method="post">
+				{% csrf_token %}
+				<input type="number" name="amount" step="any" min={{auction.start_price}}>
 				<input type="submit" value="Place Bid">
 			</form>
 

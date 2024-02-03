@@ -42,7 +42,7 @@ class Bid(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.user.full_name} - {self.auction.title} - ${self.amount}"
+        return f"{self.amount}"
  
 
 class Comment(models.Model):

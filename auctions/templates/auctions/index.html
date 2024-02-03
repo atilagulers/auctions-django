@@ -22,13 +22,7 @@
                     
                     <div class="auction-price">   
                         <label>Price:</label>
-    
-                        $
-                        {% if auction.highest_bid %}
-                            {{ auction.highest_bid }}
-                        {% else %}
-                            {{ auction.start_price }}
-                        {% endif %}
+                        $ {{ auction.start_price }}
                     </div>
 
                     <!--<div>

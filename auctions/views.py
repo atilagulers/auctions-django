@@ -101,14 +101,27 @@ def create_auction(request):
 
 def view_auction(request, auction_id):
     auction = Auction.objects.get(pk=auction_id)
-    comments = Comment.objects.all().filter(auction=auction)
+    comments = Comment.objects.all().filter(auction=auction_id)
+    bids = auction.auction_bids.all()
     
     return render(request, "auctions/view_auction.html",{
         "auction": auction,
-        "comments": comments
+        "comments": comments,
+        "bids": len(bids),
+        "user": request.user,
     })
 
-#def place_bid(request, auction_id):
+def place_bid(request, auction_id):
+    if request.method == "POST":
+        auction = Auction.objects.get(pk=auction_id)
+        user = request.user
+        amount = request.POST["amount"]
+       
+        bid = Bid(auction=auction, user=user, amount=amount)
+        bid.save()
+        auction.highest_bid = bid
+        auction.save()
+        return HttpResponseRedirect(reverse("view_auction", args=(auction_id,)))
 
 def place_comment(request, auction_id):
     if request.method == "POST":
@@ -117,7 +130,7 @@ def place_comment(request, auction_id):
         user = request.user
         comment = Comment(message=message, auction=auction, user=user)
         comment.save()
-        print(message, auction, user)
+        
         return HttpResponseRedirect(reverse("view_auction", args=(auction_id,)))
 
 
