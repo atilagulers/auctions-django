@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
  
-from .models import User, Auction, Category, Bid
+from .models import User, Auction, Category, Bid, Comment
 
 
 def index(request):
@@ -101,11 +101,24 @@ def create_auction(request):
 
 def view_auction(request, auction_id):
     auction = Auction.objects.get(pk=auction_id)
-
-
-
-  
+    comments = Comment.objects.all().filter(auction=auction)
     
     return render(request, "auctions/view_auction.html",{
-        "auction": auction
+        "auction": auction,
+        "comments": comments
     })
+
+#def place_bid(request, auction_id):
+
+def place_comment(request, auction_id):
+    if request.method == "POST":
+        message = request.POST["message"]
+        auction = Auction.objects.get(pk=auction_id)
+        user = request.user
+        comment = Comment(message=message, auction=auction, user=user)
+        comment.save()
+        print(message, auction, user)
+        return HttpResponseRedirect(reverse("view_auction", args=(auction_id,)))
+
+
+    

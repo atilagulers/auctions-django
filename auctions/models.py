@@ -47,4 +47,7 @@ class Bid(models.Model):
 
 class Comment(models.Model):
     message = models.CharField(max_length=256)
-    user = models.ForeignKey("User", on_delete=models.CASCADE, related_name='user_comments')
+    user = models.ForeignKey("User", on_delete=models.CASCADE, related_name = 'user_comments')
+    auction = models.ForeignKey("Auction", on_delete=models.CASCADE, related_name='auction_comments', default=None)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
