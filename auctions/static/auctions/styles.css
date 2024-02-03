@@ -19,8 +19,11 @@ body {
 .auction img {
   width: 100%;
   max-height: 300px;
+  min-height: 300px;
+  min-width: 100%;
+  max-width: 100%;
   object-fit: cover;
-  background-color: black;
+  background-color: gray;
 }
 
 .auction section {
@@ -72,4 +75,36 @@ body {
 
 .watchlist-button--active {
   background-color: lime;
+}
+
+.close-button {
+  margin-left: 12px;
+  margin-bottom: 32px;
+  padding: 8px 16px;
+  border: none;
+  background-color: red;
+  cursor: pointer;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  font-weight: bold;
+}
+
+.close-button:hover {
+  background-color: #ff6666;
+}
+
+/* Messages */
+
+.messages {
+  margin: 24px 0;
+  padding: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+}
+
+.messages--error {
+  background-color: #ffcccc !important;
+}
+
+.messages--success {
+  background-color: #ccffcc !important;
 }

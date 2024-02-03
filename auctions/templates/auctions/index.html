@@ -4,7 +4,15 @@
 
 {% block body %}
     <h2>Active Listings</h2>
-
+     <div>
+            {% for message in messages %}
+                {% if message.tags == 'success' %}
+                    <div class="messages messages--success">{{ message }}</div>
+                {% elif message.tags == 'error' %}
+                    <div class="messages messages--error">{{ message }}</div>
+                {% endif %}
+            {% endfor %}
+        </div>
      <div class="auction-list">
         {% for auction in auctions %}
             <div class="auction">

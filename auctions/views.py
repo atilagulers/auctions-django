@@ -3,6 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.contrib import messages
  
 from .models import User, Auction, Category, Bid, Comment
 
@@ -73,7 +74,7 @@ def create_auction(request):
 
     if request.method == 'POST':
         if not user.is_authenticated:
-            return render(request, "auctions/create.html", {
+            return render(request, "auctions/create_auction.html", {
                 "error": "Please login to create Auction"
             })
         
@@ -88,6 +89,8 @@ def create_auction(request):
         
         
         new_auction.save()
+
+        messages.success(request, "Auction created successfully.")
 
         return HttpResponseRedirect(reverse("index"))
         
@@ -115,9 +118,8 @@ def view_auction(request, auction_id):
 
 def place_bid(request, auction_id):
     if not request.user.is_authenticated:
-        return render(request, "auctions/create.html", {
-            "error": "Please login to bid an Auction."
-        })
+        messages.error(request, "Please login to bid an Auction.")
+        return HttpResponseRedirect(reverse("view_auction", args=(auction_id,)),)
 
     if request.method == "POST":
         auction = Auction.objects.get(pk=auction_id)
@@ -128,15 +130,23 @@ def place_bid(request, auction_id):
         bid.save()
         auction.highest_bid = bid
         auction.save()
+        messages.success(request, "Bid placed successfully.")
+        
         return HttpResponseRedirect(reverse("view_auction", args=(auction_id,)))
 
 def place_comment(request, auction_id):
+    if not request.user.is_authenticated:
+        messages.error(request, "Please login to comment an Auction.")
+        return HttpResponseRedirect(reverse("view_auction", args=(auction_id,)),)
+
     if request.method == "POST":
         message = request.POST["message"]
         auction = Auction.objects.get(pk=auction_id)
         user = request.user
         comment = Comment(message=message, auction=auction, user=user)
         comment.save()
+
+        messages.success(request, "Comment placed successfully.")
         
         return HttpResponseRedirect(reverse("view_auction", args=(auction_id,)))
 
@@ -144,12 +154,13 @@ def place_comment(request, auction_id):
 
 def watchlist(request, auction_id):
     if request.method == "POST":
+        
         user = request.user        
        
         if not user.is_authenticated:
-            return render(request, "auctions/create.html", {
-                "error": "Please login to create Auction"
-            })
+            messages.error(request, "Please login to add Auction to watchlist.")
+            return HttpResponseRedirect(reverse("view_auction", args=(auction_id,)),)
+            
 
         auction = Auction.objects.get(pk=auction_id)
         
@@ -159,4 +170,18 @@ def watchlist(request, auction_id):
             user.watchlist.add(auction)
     
         user.save()
+        
+        return HttpResponseRedirect(reverse("view_auction", args=(auction_id,)))
+
+def close_auction(request, auction_id):
+    if request.method == "POST":
+        if not request.user.id == Auction.objects.get(pk=auction_id).user.id:
+            messages.error(request, "You are not authorized to close this Auction.")
+            return HttpResponseRedirect(reverse("view_auction", args=(auction_id,)),)
+
+        auction = Auction.objects.get(pk=auction_id)
+        auction.is_active = False
+        auction.save()
+        
+        messages.success(request, "Auction closed successfully.")
         return HttpResponseRedirect(reverse("view_auction", args=(auction_id,)))
