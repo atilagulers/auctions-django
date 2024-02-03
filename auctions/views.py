@@ -9,7 +9,6 @@ from .models import User, Auction, Category, Bid, Comment
 
 def index(request):
     auctions = Auction.objects.all().filter(is_active=True)
-    print(auctions)
     return render(request, "auctions/index.html",{
         "auctions": auctions
     })
@@ -17,7 +16,6 @@ def index(request):
 
 def login_view(request):
     if request.method == "POST":
-
         # Attempt to sign user in
         username = request.POST["username"]
         password = request.POST["password"]
@@ -103,15 +101,24 @@ def view_auction(request, auction_id):
     auction = Auction.objects.get(pk=auction_id)
     comments = Comment.objects.all().filter(auction=auction_id)
     bids = auction.auction_bids.all()
+    user = request.user
+    is_watching = auction in user.watchlist.all() if user.is_authenticated else False
     
     return render(request, "auctions/view_auction.html",{
         "auction": auction,
         "comments": comments,
         "bids": len(bids),
         "user": request.user,
+        "is_watching": is_watching
     })
 
+
 def place_bid(request, auction_id):
+    if not request.user.is_authenticated:
+        return render(request, "auctions/create.html", {
+            "error": "Please login to bid an Auction."
+        })
+
     if request.method == "POST":
         auction = Auction.objects.get(pk=auction_id)
         user = request.user
@@ -134,4 +141,22 @@ def place_comment(request, auction_id):
         return HttpResponseRedirect(reverse("view_auction", args=(auction_id,)))
 
 
+
+def watchlist(request, auction_id):
+    if request.method == "POST":
+        user = request.user        
+       
+        if not user.is_authenticated:
+            return render(request, "auctions/create.html", {
+                "error": "Please login to create Auction"
+            })
+
+        auction = Auction.objects.get(pk=auction_id)
+        
+        if auction in user.watchlist.all():
+            user.watchlist.remove(auction)
+        else:
+            user.watchlist.add(auction)
     
+        user.save()
+        return HttpResponseRedirect(reverse("view_auction", args=(auction_id,)))

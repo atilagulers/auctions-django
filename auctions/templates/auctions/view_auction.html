@@ -8,7 +8,16 @@
 	<img src="{{auction.image_url}}" alt="photo {{auction.title}}" style="width: 400px; height: 600px; object-fit: cover;">
 
 	<div style="margin: 16px 48px;">
-		<h2 style="margin-bottom: 32px;">Listing: {{auction.title}}</h2>
+		<h2 style="margin-bottom: 8px;">Listing: {{auction.title}}</h2>
+		
+		<form action="{% url 'watchlist' auction.id %}" method="post">
+			{% csrf_token %}
+
+			<button class="watchlist-button {% if is_watching  %} watchlist-button--active {% endif %}">
+				Watchlist
+			</button>
+		</form>
+		
 		<div style="display: flex; flex-direction: column; gap: 16px;">
 			<div>{{auction.description}}</div>
 			<div style="font-weight: bold; font-size:x-large;">
@@ -22,11 +31,9 @@
 				{{bids}} bid(s) so far.
 				<span>
 					{% if auction.highest_bid.user == user %}
-						<p>Your bid is the current bid.</p>
+						Your bid is the current bid.
 					{% elif auction.highest_bid.user %}
-						<p>Current bid by {{auction.highest_bid.user}}</p>
-					{% else %}
-						<p>No bids yet.</p>
+						Current bid by {{auction.highest_bid.user}}
 					{% endif %}
 				</span>
 			</div>

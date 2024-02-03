@@ -55,3 +55,21 @@ body {
 }
 
 /* Button */
+
+.watchlist-button {
+  margin-bottom: 32px;
+  padding: 8px 16px;
+  border: none;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  font-weight: bold;
+}
+
+.watchlist-button:hover {
+  background-color: #e0e0e0;
+}
+
+.watchlist-button--active {
+  background-color: lime;
+}
